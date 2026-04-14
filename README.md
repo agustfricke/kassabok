@@ -1,6 +1,6 @@
-# swish-logger
+# Kassabok
 
-**Swish Logger** is a simple sales tracking app for `Swish` payments. It stores 
+**Kassabok** is a simple sales tracking app for `Swish` payments. It stores 
 all records in local storage — nothing fancy, but far better than pen and paper.
 
 When you are ready to analyze your data, you can export everything to a CSV file.
