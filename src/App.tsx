@@ -14,7 +14,7 @@ function App() {
 
   return (
     <div className="flex h-dvh flex-col bg-background">
-      <div className="flex-1 overflow-hidden pb-16">
+      <div className="flex flex-1 flex-col overflow-hidden pb-16">
         {page === 'products' && <ProductsPage />}
         {page === 'cart' && <CartPage />}
         {page === 'history' && <HistoryPage />}

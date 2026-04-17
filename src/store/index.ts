@@ -2,11 +2,17 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { nanoid } from '../lib/nanoid'
 
+export interface Category {
+  id: string
+  name: string
+}
+
 export interface Product {
   id: string
   name: string
   price: number
   timesSelected: number
+  categoryId?: string
 }
 
 export interface CartItem {
@@ -33,11 +39,16 @@ interface AppStore {
   products: Product[]
   cart: CartItem[]
   history: Sale[]
+  categories: Category[]
 
-  addProduct: (name: string, price: number) => void
+  addProduct: (name: string, price: number, categoryId?: string) => void
   deleteProduct: (id: string) => void
   selectProduct: (product: Product) => void
   importProducts: (products: Pick<Product, 'id' | 'name' | 'price'>[]) => void
+
+  addCategory: (name: string) => void
+  deleteCategory: (id: string) => void
+  setProductCategory: (productId: string, categoryId: string | null) => void
 
   updateCartQuantity: (productId: string, delta: number) => void
   removeFromCart: (productId: string) => void
@@ -52,12 +63,13 @@ export const useStore = create<AppStore>()(
       products: [],
       cart: [],
       history: [],
+      categories: [],
 
-      addProduct: (name, price) =>
+      addProduct: (name, price, categoryId) =>
         set((s) => ({
           products: [
             ...s.products,
-            { id: nanoid(), name, price, timesSelected: 0 },
+            { id: nanoid(), name, price, timesSelected: 0, categoryId: categoryId ?? undefined },
           ],
         })),
 
@@ -104,6 +116,28 @@ export const useStore = create<AppStore>()(
           })),
         })),
 
+      addCategory: (name) =>
+        set((s) => ({
+          categories: [...s.categories, { id: nanoid(), name }],
+        })),
+
+      deleteCategory: (id) =>
+        set((s) => ({
+          categories: s.categories.filter((c) => c.id !== id),
+          products: s.products.map((p) =>
+            p.categoryId === id ? { ...p, categoryId: undefined } : p,
+          ),
+        })),
+
+      setProductCategory: (productId, categoryId) =>
+        set((s) => ({
+          products: s.products.map((p) =>
+            p.id === productId
+              ? { ...p, categoryId: categoryId ?? undefined }
+              : p,
+          ),
+        })),
+
       updateCartQuantity: (productId, delta) =>
         set((s) => ({
           cart: s.cart
@@ -144,6 +178,7 @@ export const useStore = create<AppStore>()(
         products: s.products,
         cart: s.cart,
         history: s.history,
+        categories: s.categories,
       }),
     },
   ),

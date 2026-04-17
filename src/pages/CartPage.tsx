@@ -10,14 +10,13 @@ export function CartPage() {
   const confirmSale = useStore((s) => s.confirmSale)
 
   const total = cart.reduce((sum, c) => sum + c.productPrice * c.quantity, 0)
-  const itemCount = cart.reduce((sum, c) => sum + c.quantity, 0)
 
   function handleConfirm() {
     confirmSale()
   }
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex flex-1 flex-col overflow-hidden">
       {cart.length === 0 ? (
         <div className="flex flex-1 items-center justify-center text-sm text-muted-foreground">
           Varukorgen är tom
@@ -25,7 +24,7 @@ export function CartPage() {
       ) : (
         <>
           {/* Items */}
-          <div className="flex-1 overflow-y-auto divide-y divide-border">
+          <div className="min-h-0 flex-1 overflow-y-auto divide-y divide-border">
             {cart.map((item: CartItem) => (
               <div key={item.productId} className="flex items-center gap-3 px-4 py-3">
                 <div className="flex-1 min-w-0">
