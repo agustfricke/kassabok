@@ -1,20 +1,20 @@
-import { useState } from 'react'
-import { useStore } from '@/store'
-import type { Product } from '@/store'
+import { useState } from "react";
+import { useStore } from "@/store";
+import type { Product } from "@/store";
 
 export function ProductsPage() {
-  const products = useStore((s) => s.products)
-  const categories = useStore((s) => s.categories ?? [])
-  const cart = useStore((s) => s.cart)
-  const selectProduct = useStore((s) => s.selectProduct)
-  const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null)
+  const products = useStore((s) => s.products);
+  const categories = useStore((s) => s.categories ?? []);
+  const cart = useStore((s) => s.cart);
+  const selectProduct = useStore((s) => s.selectProduct);
+  const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
 
   const filteredProducts = activeCategoryId
     ? products.filter((p) => p.categoryId === activeCategoryId)
-    : products
+    : products;
 
   function cartQty(productId: string) {
-    return cart.find((c) => c.productId === productId)?.quantity ?? 0
+    return cart.find((c) => c.productId === productId)?.quantity ?? 0;
   }
 
   return (
@@ -26,8 +26,8 @@ export function ProductsPage() {
             onClick={() => setActiveCategoryId(null)}
             className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium transition-colors ${
               activeCategoryId === null
-                ? 'bg-foreground text-background'
-                : 'bg-card text-muted-foreground hover:bg-accent'
+                ? "bg-foreground text-background"
+                : "bg-card text-muted-foreground hover:bg-accent"
             }`}
           >
             Alla
@@ -40,8 +40,8 @@ export function ProductsPage() {
               }
               className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium transition-colors ${
                 activeCategoryId === cat.id
-                  ? 'bg-foreground text-background'
-                  : 'bg-card text-muted-foreground hover:bg-accent'
+                  ? "bg-foreground text-background"
+                  : "bg-card text-muted-foreground hover:bg-accent"
               }`}
             >
               {cat.name}
@@ -67,14 +67,14 @@ export function ProductsPage() {
               <button
                 key={product.id}
                 onClick={() => selectProduct(product)}
-                className="group relative flex flex-col rounded-lg border border-border bg-card p-3 text-left transition-colors hover:bg-accent active:scale-95"
+                className="group relative flex flex-col rounded-lg border border-border bg-card p-3 text-left transition-colors hover:bg-accent active:scale-95 min-w-0"
               >
                 {cartQty(product.id) > 0 && (
                   <span className="absolute right-2 top-2 flex size-4 items-center justify-center rounded-full bg-foreground text-[10px] font-semibold text-background">
                     {cartQty(product.id)}
                   </span>
                 )}
-                <span className="mt-1 line-clamp-2 text-sm font-medium leading-tight">
+                <span className="text-xs leading-tight font-medium break-words min-w-0 w-full">
                   {product.name}
                 </span>
                 <span className="mt-1.5 text-sm font-semibold">
@@ -86,5 +86,5 @@ export function ProductsPage() {
         )}
       </div>
     </div>
-  )
+  );
 }
